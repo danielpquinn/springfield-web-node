@@ -1,0 +1,17 @@
+extends ./layout.jade
+
+block content
+  h2 Current Weather in Springfield, IL
+
+  table
+    thead
+      tr
+        th City
+        th Description
+        th Temperature
+    tbody
+      each city in cities
+        tr
+          td= city.name
+          td= city.description
+          td #{city.temperature} &deg;F

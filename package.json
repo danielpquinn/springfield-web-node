@@ -1,0 +1,31 @@
+{
+  "name": "springfield-web-node",
+  "version": "1.0.0",
+  "description": "Springfield Web Intro to Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielpquinn/springfield-web-node.git"
+  },
+  "keywords": [
+    "Example",
+    "Express",
+    "Bluebird"
+  ],
+  "author": "Dan Quinn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielpquinn/springfield-web-node/issues"
+  },
+  "homepage": "https://github.com/danielpquinn/springfield-web-node#readme",
+  "dependencies": {
+    "bluebird": "^2.9.30",
+    "express": "^4.13.0",
+    "jade": "^1.11.0",
+    "request": "^2.58.0"
+  }
+}

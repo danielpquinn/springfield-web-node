@@ -1,2 +1,3 @@
 # springfield-web-node
-Notes and code samples for Springfield Web Intro to Node.js meetup.
+
+Example express app built as an example for the Springfield Web meetup group.
