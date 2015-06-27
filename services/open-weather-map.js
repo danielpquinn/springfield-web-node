@@ -25,7 +25,7 @@ OpenWeatherMap.prototype.getWeather = function (options, cb) {
 
   var options = extend(defaults, options);
 
-  var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + options.city + ',' + options.state + '&units=' + options.units;
+  var url = OpenWeatherMap.baseUrl + '?q=' + options.city + ',' + options.state + '&units=' + options.units;
 
   // Send request
 
