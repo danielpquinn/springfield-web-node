@@ -2,107 +2,92 @@
 // Dependencies
 
 var Promise = require('bluebird');
-var request = Promise.promisifyAll(require('request'));
+
+// Wrap open weather map api with promises
+
+var openWeatherMap = Promise.promisifyAll(require('../services/open-weather-map'));
 
 // Exports
 
 module.exports = function (req, res, next) {
-
-  // Fetch data from open weather map api using promises
-
-  var addCityAsync = function (city, state) {
-
-    return request.getAsync({
-      url: 'http://api.openweathermap.org/data/2.5/weather?q=' + city + ',' + state + '&units=imperial',
-      json: true
-    })
-    .then(function (response) {
-      var body = response[1];
-
-      // If result was not a 200, pass error back to caller
-      
-      if (body.cod !== 200) { throw new Error(body.message); }
-
-      // Add relevant response data to view
-      
-      res.locals.cities.push({
-        name: city + ', ' + state,
-        temperature: body.main.temp,
-        description: body.weather[0].description
-      });
-    });
-  };
-
-  // Fetch data from open weather map api using callbacks
-
-  var addCity = function (city, state, cb) {
-
-    request.get({
-      url: 'http://api.openweathermap.org/data/2.5/weather?q=' + city + ',' + state + '&units=imperial',
-      json: true
-    }, function (err, response, body) {
-
-      // Allow caller to handle error
-
-      if (err) { return cb(err); }
-
-      // If result was not a 200, pass error back to caller
-      
-      if (response.cod !== 200) { return cb(new Error(body.message)); }
-
-      // Add relevant response data to view
-      
-      res.locals.cities.push({
-        name: city + ', ' + state,
-        temperature: body.main.temp,
-        description: body.weather[0].description
-      });
-
-      // Pass data back to caller
-
-      cb();
-    });
-
-  };
 
   // Set up view data
 
   res.locals.cities = [];
 
   // Use callbacks to do several things asynchronously
-
-  // addCity('Springfield', 'IL', function (err) {
+  
+  // openWeatherMap.getWeather({
+  //   city: 'Springfield',
+  //   state: 'IL',
+  //   units: 'imperial'
+  // }, function (err, weather) {
   //   if (err) { return next(err); }
+  //   res.locals.cities.push(weather);
 
-  //   addCity('Jacksonville', 'IL', function (err) {
+
+  //   openWeatherMap.getWeather({
+  //     city: 'Jacksonville',
+  //     state: 'IL',
+  //     units: 'imperial'
+  //   }, function (err, weather) {
   //     if (err) { return next(err); }
+  //     res.locals.cities.push(weather);
 
-  //     addCity('Helena', 'MT', function (err) {
+  //     openWeatherMap.getWeather({
+  //       city: 'Bloomington',
+  //       state: 'IL',
+  //       units: 'imperial'
+  //     }, function (err, weather) {
   //       if (err) { return next(err); }
+  //       res.locals.cities.push(weather);
 
-  //       addCity('New York', 'NY', function (err) {
-  //         if (err) { return next(err); }
-
-  //         res.render('weather');
-  //       });
+  //       res.render('weather');
   //     });
   //   });
   // });
 
   // Kick off chain of promises. Notice no callback nesting!
+  
+  // openWeatherMap.getWeatherAsync({
+  //   city: 'Springfield',
+  //   state: 'IL',
+  //   units: 'imperial'
+  // }).then(function (weather) {
+  //   res.locals.cities.push(weather);
 
-  addCityAsync('Springfield', 'IL')
-    .then(function () {
-      return addCityAsync('Jacksonville', 'IL');
-    })
-    .then(function () {
-      return addCityAsync('Helena', 'MT');
-    })
-    .then(function () {
-      return addCityAsync('New York', 'NY');
-    })
-    .then(function () {
-      res.render('weather');
-    })
-    .catch(next);
+  //   return openWeatherMap.getWeatherAsync({
+  //     city: 'Jacksonville',
+  //     state: 'IL',
+  //     units: 'imperial'
+  //   });
+  // }).then(function (weather) {
+  //   res.locals.cities.push(weather);
+
+  //   return openWeatherMap.getWeatherAsync({
+  //     city: 'Bloomington',
+  //     state: 'IL',
+  //     units: 'imperial'
+  //   });
+  // }).then(function (weather) {
+  //   res.locals.cities.push(weather);
+
+  //   res.render('weather');
+  // }).catch(next);
+
+  // Execute promises in parallel
+  
+  Promise.all([
+    openWeatherMap.getWeatherAsync({ city: 'Springfield', state: 'IL', units: 'imperial' }),
+    openWeatherMap.getWeatherAsync({ city: 'Jacksonville', state: 'IL', units: 'imperial' }),
+    openWeatherMap.getWeatherAsync({ city: 'Bloomington', state: 'IL', units: 'imperial' }),
+    openWeatherMap.getWeatherAsync({ city: 'Chicago', state: 'IL', units: 'imperial' })
+  ]).then(function (results) {
+    results.forEach(function (city) {
+      res.locals.cities.push(city);
+    });
+
+    res.render('weather');
+  }).catch(next);
+
 };
