@@ -10,7 +10,6 @@ var app = express();
 
 // Configure app
 
-app.use(express.static('public'));
 app.set('views', './views');
 app.set('view engine', 'jade');
 
@@ -22,6 +21,8 @@ routes(app);
 
 var server = app.listen(3000, function () {
   var address = server.address();
+
+  console.log(server.address);
 
   console.log('App running at http://%s:%s', address.host, address.port);
 });

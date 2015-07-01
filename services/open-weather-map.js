@@ -12,7 +12,7 @@ function OpenWeatherMap() {}
 
 // Static properties
 
-OpenWeatherMap.baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
+OpenWeatherMap.baseUrl = 'http://api.openweathermap.org/data/2.5/';
 
 // Get weather for city and state using callback pattern
 
@@ -25,7 +25,7 @@ OpenWeatherMap.prototype.getWeather = function (options, cb) {
 
   var options = extend(defaults, options);
 
-  var url = OpenWeatherMap.baseUrl + '?q=' + options.city + ',' + options.state + '&units=' + options.units;
+  var url = OpenWeatherMap.baseUrl + 'weather?q=' + options.city + ',' + options.state + '&units=' + options.units;
 
   // Send request
 
