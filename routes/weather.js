@@ -49,45 +49,45 @@ module.exports = function (req, res, next) {
 
   // Kick off chain of promises. Notice no callback nesting!
   
-  // openWeatherMap.getWeatherAsync({
-  //   city: 'Springfield',
-  //   state: 'IL',
-  //   units: 'imperial'
-  // }).then(function (weather) {
-  //   res.locals.cities.push(weather);
+  openWeatherMap.getWeatherAsync({
+    city: 'Springfield',
+    state: 'IL',
+    units: 'imperial'
+  }).then(function (weather) {
+    res.locals.cities.push(weather);
 
-  //   return openWeatherMap.getWeatherAsync({
-  //     city: 'Jacksonville',
-  //     state: 'IL',
-  //     units: 'imperial'
-  //   });
-  // }).then(function (weather) {
-  //   res.locals.cities.push(weather);
-
-  //   return openWeatherMap.getWeatherAsync({
-  //     city: 'Bloomington',
-  //     state: 'IL',
-  //     units: 'imperial'
-  //   });
-  // }).then(function (weather) {
-  //   res.locals.cities.push(weather);
-
-  //   res.render('weather');
-  // }).catch(next);
-
-  // Execute promises in parallel
-  
-  Promise.all([
-    openWeatherMap.getWeatherAsync({ city: 'Springfield', state: 'IL', units: 'imperial' }),
-    openWeatherMap.getWeatherAsync({ city: 'Jacksonville', state: 'IL', units: 'imperial' }),
-    openWeatherMap.getWeatherAsync({ city: 'Bloomington', state: 'IL', units: 'imperial' }),
-    openWeatherMap.getWeatherAsync({ city: 'Chicago', state: 'IL', units: 'imperial' })
-  ]).then(function (results) {
-    results.forEach(function (city) {
-      res.locals.cities.push(city);
+    return openWeatherMap.getWeatherAsync({
+      city: 'Jacksonville',
+      state: 'IL',
+      units: 'imperial'
     });
+  }).then(function (weather) {
+    res.locals.cities.push(weather);
+
+    return openWeatherMap.getWeatherAsync({
+      city: 'Bloomington',
+      state: 'IL',
+      units: 'imperial'
+    });
+  }).then(function (weather) {
+    res.locals.cities.push(weather);
 
     res.render('weather');
   }).catch(next);
+
+  // Execute promises in parallel
+  
+  // Promise.all([
+  //   openWeatherMap.getWeatherAsync({ city: 'Springfield', state: 'IL', units: 'imperial' }),
+  //   openWeatherMap.getWeatherAsync({ city: 'Jacksonville', state: 'IL', units: 'imperial' }),
+  //   openWeatherMap.getWeatherAsync({ city: 'Bloomington', state: 'IL', units: 'imperial' }),
+  //   openWeatherMap.getWeatherAsync({ city: 'Chicago', state: 'IL', units: 'imperial' })
+  // ]).then(function (results) {
+  //   results.forEach(function (city) {
+  //     res.locals.cities.push(city);
+  //   });
+
+  //   res.render('weather');
+  // }).catch(next);
 
 };
