@@ -15,7 +15,7 @@ module.exports = function (req, res, next) {
 
   res.locals.cities = [];
 
-  // Use callbacks to do several operations asynchronously
+  // Use callbacks to do several operations synchronously
   
   // openWeatherMap.getWeather({
   //   city: 'Springfield',
